@@ -1,0 +1,67 @@
+service: spider-less
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  region: ${self:custom.defaultRegion}
+  stage: ${env:NODE_ENV, self:custom.defaultNodeEnv}
+  environment:
+    NODE_ENV:  ${env:NODE_ENV, self:custom.defaultNodeEnv}
+    REGION: ${self:provider.region}
+    TABLE_SUBSCRIPTIONS: ${self:service}-subscriptions-${self:provider.stage}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/*"
+
+functions:
+  http:
+    handler: src/index.api
+    timeout: 30
+    events:
+      - http:
+          path: /{proxy+}
+          method: any
+          cors: true
+  cron:
+    handler: src/index.cron
+    timeout: 60
+    events:
+      - schedule:
+          rate: rate(60 minutes)
+  scrape:
+    handler: src/index.scrape
+    timeout: 60
+    memorySize: 1536
+
+resources:
+  Resources:
+    SubscriptionsTable:
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain # Keeps around the DynamoDB resource when we redeploy/destroy
+      Properties:
+        TableName: ${self:provider.environment.TABLE_SUBSCRIPTIONS}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+plugins:
+  - serverless-offline
+
+custom:
+  defaultRegion: us-east-1
+  defaultNodeEnv: dev
+  serverless-offline:
+    dontPrintOutput: true
