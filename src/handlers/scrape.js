@@ -2,14 +2,15 @@
 
 const cheerio = require('cheerio')
 const signale = require('signale')
+const Joi = require('joi')
 const { crawl } = require('../libs/spider')
+const { lambda: schema } = require('../validations/subscription')
 
 module.exports = (subscription, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false
-  const url = subscription.url
-  signale.info(`Start scraping: ${url}`)
 
-  crawl(subscription.url)
+  validate(subscription, schema)
+    .then(crawl)
     .then(load)
     .then($ => parse(subscription, $))
     .then(res => {
@@ -19,9 +20,14 @@ module.exports = (subscription, context, callback) => {
       callback(null)
     })
     .catch(err => {
-      signale.error(`Error scraping ${url}`, err)
+      signale.error(`Error scraping ${subscription.url}`, err)
       callback(err)
     })
+}
+
+function validate (subscription, schema) {
+  return Joi.validate(subscription, schema)
+    .then(({ url }) => url)
 }
 
 function load (htmlStr) {
