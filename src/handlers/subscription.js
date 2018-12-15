@@ -25,9 +25,10 @@ function create (req, res) {
     url,
     targets,
     interval,
-    createdAt: timestamp
+    createdAt: timestamp,
+    updatedAt: timestamp
   }
-  signale.debug(subscription)
+  signale.info('New subscription created', subscription)
 
   awsClient.dynamodb.create(subscription)
     .then(data => res.status(200).json(data))

@@ -15,6 +15,7 @@ module.exports = (subscription, context, callback) => {
     .then(res => {
       // NOTE: do whatever you want with it :)
       signale.success('Bingo', res)
+      // TODO: update updatedAt timestamp
       callback(null)
     })
     .catch(err => {

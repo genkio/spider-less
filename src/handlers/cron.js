@@ -19,6 +19,7 @@ module.exports = (event, context, callback) => {
 }
 
 function filter (subscriptions) {
+  signale.info('Filtering subscriptions', subscriptions)
   return new Promise((resolve, reject) => {
     if (!subscriptions || !Array.isArray(subscriptions)) {
       return reject(new Error('Subscriptions list corrupted'))
@@ -33,7 +34,7 @@ function filter (subscriptions) {
 }
 
 function handle (subscriptions) {
-  signale.debug('Handling subscriptions', subscriptions)
+  signale.info('Ready to crawl', subscriptions)
   const { IS_LOCAL } = process.env
   if (IS_LOCAL) {
     return Promise.resolve()
