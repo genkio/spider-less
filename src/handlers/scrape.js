@@ -37,7 +37,7 @@ function parse (subscription, $) {
     let res = []
     try {
       res = subscription.targets.map(t => {
-        return { label: t.label, html: extract($, t) }
+        return { label: t.label, content: extract($, t) }
       })
       resolve(res)
     } catch (err) {
@@ -47,20 +47,5 @@ function parse (subscription, $) {
 }
 
 function extract($, target) {
-  const cheerio = $(target.selector)
-  return Array.from(
-    cheerio.map((i, n) => getText($(n)))
-  )
-}
-
-function getText(cheerio) {
-  const node = cheerio[0]
-  if (!node) {
-    return '🤔'
-  }
-  return escape(cheerio.text())
-}
-
-function escape(str) {
-  return str.replace(/[/\n|/\t]/g, '')
+  return $(target.selector).text()
 }

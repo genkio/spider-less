@@ -5,7 +5,7 @@ const iconv = require('iconv-lite')
 const signale = require('signale')
 const BufferHelper = require('bufferhelper')
 
-function crawl ({ url }) {
+function crawl (url) {
   let charSet = ''
 
   return new Promise((resolve, reject) => {
