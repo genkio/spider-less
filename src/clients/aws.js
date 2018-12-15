@@ -19,6 +19,19 @@ function create (item, table = TABLE_SUBSCRIPTIONS) {
   })
 }
 
+function get (id, table = TABLE_SUBSCRIPTIONS) {
+  return new Promise((resolve, reject) => {
+    const params = {
+      TableName: table,
+      Key: { id }
+    }
+    dynamodb.get(params, (error, response) => {
+      if (error) return reject(error)
+      resolve(response.Item)
+    })
+  })
+}
+
 function remove (id, table = TABLE_SUBSCRIPTIONS) {
   return new Promise((resolve, reject) => {
     const params = {
@@ -59,6 +72,7 @@ function publish (arn, message) {
 module.exports = {
   dynamodb: {
     create,
+    get,
     remove,
     list
   },
