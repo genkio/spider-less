@@ -21,6 +21,12 @@ app.use((req, res, next) => {
 app.use(morgan('combined'))
 app.use('/api/subscriptions', router)
 
+app.use((req, res, next) => {
+  var err = new Error('Not Found')
+  err.status = 404
+  next(err)
+})
+
 app.use((err, req, res, next) => {
   signale.fatal(err)
   res.status(400).json('Bad Request')

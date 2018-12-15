@@ -9,6 +9,6 @@ module.exports = {
       label: Joi.string(),
       selector: Joi.string().required()
     })).required(),
-    frequency: Joi.number().required()
+    interval: Joi.number().required()
   }
 }

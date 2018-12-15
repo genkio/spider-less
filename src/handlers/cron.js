@@ -24,9 +24,9 @@ function filter (subscriptions) {
       return reject(new Error('Subscriptions list corrupted'))
     }
     const list = subscriptions
-      .filter(({ updatedAt, frequency }) => {
-        const sinceLastUpdate = dayjs().diff(dayjs(updatedAt), 'hours')
-        return sinceLastUpdate > frequency
+      .filter(({ updatedAt, interval }) => {
+        const sinceLastUpdate = dayjs().diff(dayjs(updatedAt), 'minutes')
+        return sinceLastUpdate > interval
       })
     return resolve(list)
   })
