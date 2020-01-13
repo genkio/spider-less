@@ -48,7 +48,7 @@
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-standard": "^3.0.1",
     "pre-commit": "^1.2.2",
-    "serverless": "^1.25.0",
+    "serverless": "^1.60.5",
     "serverless-offline": "^3.16.0"
   },
   "signale": {
