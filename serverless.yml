@@ -2,7 +2,7 @@ service: spider-less
 
 provider:
   name: aws
-  runtime: nodejs6.10
+  runtime: nodejs12.x
   region: ${self:custom.defaultRegion}
   stage: ${env:NODE_ENV, self:custom.defaultNodeEnv}
   environment:
