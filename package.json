@@ -29,7 +29,7 @@
     "bufferhelper": "^0.2.1",
     "cheerio": "^1.0.0-rc.2",
     "dayjs": "^1.7.7",
-    "express": "^4.16.2",
+    "express": "^4.17.3",
     "express-validation": "^1.0.2",
     "iconv-lite": "^0.4.19",
     "joi": "12",
